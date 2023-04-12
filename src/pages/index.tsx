@@ -33,7 +33,7 @@ export default function Home() {
                     type="url"
                     pattern="https://.*"
                     name="url"
-                    className="w-full lg:w-3/4 sm:w-full block lg:m-auto mb-2 p-4 border border-gray-300 dark:border-border-gray dark:focus:border-black dark:ring-black rounded-md bg-[#f7f7f7] sm:text-md  dark:bg-bg-secondary dark:border-red"
+                    className="w-full lg:w-3/4 sm:w-full block mb-2 lg:mb-auto p-4 border border-gray-300 dark:border-border-gray dark:focus:border-black dark:ring-black rounded-md bg-[#f7f7f7] sm:text-md  dark:bg-bg-secondary dark:border-red"
                     required
                 />
                 <button
@@ -41,10 +41,10 @@ export default function Home() {
                     onClick={handleUrlSubmit}
                     className="w-full sm:w-full lg:w-1/4 lg:ml-2 p-2 flex items-center justify-center dark:disabled:bg-bg-secondary disabled:bg-gray-100 font-bold border rounded-md dark:border-border-gray hover:bg-gray-50 dark:hover:bg-bg-secondary transition-all"
                     type="submit">
-                    {!isLoading ? <Fragment><Loader /> <span className="ml-2">Loading</span></Fragment> : "Shorten"}
+                    {isLoading ? <Fragment><Loader /> <span className="ml-2">Loading</span></Fragment> : "Shorten"}
                 </button>
             </div>
-            {!shortly && <ResultCard url={url} shortUrl={shortly} />}
+            {shortly && <ResultCard url={url} shortUrl={shortly} />}
         </main>
     );
 }
