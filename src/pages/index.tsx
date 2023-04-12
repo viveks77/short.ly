@@ -23,9 +23,9 @@ export default function Home() {
     };
 
     return (
-        <main className="flex-1 w-[550px] m-auto flex flex-col items-center">
+        <main className="flex-1 sm:w-[500px] lg:w-[550px] m-8 lg:m-auto sm:m-auto flex flex-col items-center">
             <div className="my-20 text-5xl font-poppins text-center">URL shortner</div>
-            <div className="m-5 w-full flex">
+            <div className="m-5 w-full flex-col lg:flex md:flex lg:flex-row">
                 <input
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
@@ -33,18 +33,18 @@ export default function Home() {
                     type="url"
                     pattern="https://.*"
                     name="url"
-                    className="w-3/4 block p-4 border border-gray-300 dark:border-border-gray dark:focus:border-black dark:ring-black rounded-md bg-[#f7f7f7] sm:text-md  dark:bg-bg-secondary dark:border-red"
+                    className="w-full lg:w-3/4 sm:w-full block lg:m-auto mb-2 p-4 border border-gray-300 dark:border-border-gray dark:focus:border-black dark:ring-black rounded-md bg-[#f7f7f7] sm:text-md  dark:bg-bg-secondary dark:border-red"
                     required
                 />
                 <button
                     disabled={isLoading}
                     onClick={handleUrlSubmit}
-                    className="flex items-center justify-around dark:disabled:bg-bg-secondary disabled:bg-gray-100 font-bold w-1/4 ml-2 p-2 border rounded-md dark:border-border-gray hover:bg-gray-50 dark:hover:bg-bg-secondary transition-all"
+                    className="w-full sm:w-full lg:w-1/4 lg:ml-2 p-2 flex items-center justify-center dark:disabled:bg-bg-secondary disabled:bg-gray-100 font-bold border rounded-md dark:border-border-gray hover:bg-gray-50 dark:hover:bg-bg-secondary transition-all"
                     type="submit">
-                    {isLoading ? <Fragment><Loader /> <span>Loading</span></Fragment> : "Shorten"}
+                    {!isLoading ? <Fragment><Loader /> <span className="ml-2">Loading</span></Fragment> : "Shorten"}
                 </button>
             </div>
-            {shortly && <ResultCard url={url} shortUrl={shortly} />}
+            {!shortly && <ResultCard url={url} shortUrl={shortly} />}
         </main>
     );
 }
