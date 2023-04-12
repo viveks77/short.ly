@@ -10,9 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model shortUrl {
+model ShortUrl {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  alias     String
+  alias     String   @unique
   url       String
   createdAt DateTime @default(now())
   expiresIn DateTime
