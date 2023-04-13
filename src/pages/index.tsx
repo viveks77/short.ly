@@ -3,7 +3,6 @@ import { api } from "@/utils/api";
 import ResultCard from "@/components/resultCard";
 import Loader from "@/components/loader";
 import { ToastContainer, toast } from "react-toastify";
-import { isValidHttpUrl } from "@/utils/helpers";
 
 export default function Home() {
     const [shortly, setShortly] = useState<string>("");
@@ -23,11 +22,12 @@ export default function Home() {
         if (url == "") return;
 
         //Append https: to url
-        let URI = url.indexOf("://") === -1 ? "https://" + url : url;
+        let URI = url.indexOf("://") === -1 ? "https://" + url : url;;
 
-        if (!isValidHttpUrl(URI)) {
-            toast.error("Invalid URL format");
-            return;
+        try{
+            new URL(URI);
+        }catch{
+            toast.error("Invalid url format");
         }
 
         mutate({ url: URI });

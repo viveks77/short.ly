@@ -24,7 +24,9 @@ const ResultCard = ({url, shortUrl}: Props) => {
   return (
     <div className="rounded-md m-5 p-2 bg-gray-50 dark:bg-bg-secondary w-full">
         <div className="p-2 flex items-center justify-between">
-           <Link className='w-[220px] overflow-hidden text-ellipsis whitespace-nowrap text-blue-400 font-bold hover:text-blue-500' target='_blank' href={shortly.href}>{shortly.host + shortly.pathname}</Link>
+           <Link className='w-[220px] overflow-hidden text-ellipsis whitespace-nowrap text-blue-400 font-bold hover:text-blue-500' target='_blank' href={shortly.href}>
+            {"short.ly" + shortly.pathname}
+            </Link>
            <button onClick={() => {navigator.clipboard.writeText(shortly.href); toast.success("Copied to clipboard")}} title='copy' className="p-2 border rounded-md dark:border-border-gray hover:bg-gray-50 dark:hover:bg-bg-secondary transition-all">
               <CopyIcon />
            </button>

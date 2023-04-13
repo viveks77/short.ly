@@ -11,7 +11,7 @@ export const shortUrlRouter = createTRPCRouter({
         .mutation(async ({input, ctx}) => {
             let alias = nanoid(7);
             let expiresIn = new Date();
-            expiresIn.setDate(expiresIn.getDate() + ShortUrlConsts.URL_EXPIRY_IN_DAYS);
+            expiresIn.setHours(expiresIn.getHours() + ShortUrlConsts.URL_EXPIRY_IN_HOURS);
             const shortUrl = await ctx.prisma.shortUrl.create({
                 data: {
                     alias: alias,
