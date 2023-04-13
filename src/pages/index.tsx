@@ -2,28 +2,40 @@ import { Fragment, useState } from "react";
 import { api } from "@/utils/api";
 import ResultCard from "@/components/resultCard";
 import Loader from "@/components/loader";
+import { ToastContainer, toast } from "react-toastify";
+import { isValidHttpUrl } from "@/utils/helpers";
 
 export default function Home() {
     const [shortly, setShortly] = useState<string>("");
+    const [url, setUrl] = useState<string>("");
 
     const { mutate, isLoading } = api.shortUrlRouter.create.useMutation({
         onSuccess: (res) => {
             setShortly(res.alias);
+            setUrl("");
         },
         onError: (e) => {
-            console.log(e);
+            toast.error("Something went wrong");
         },
     });
 
-    const [url, setUrl] = useState<string>("");
-
     const handleUrlSubmit = () => {
         if (url == "") return;
-        mutate({ url: url });
+
+        //Append https: to url
+        let URI = url.indexOf("://") === -1 ? "https://" + url : url;
+
+        if (!isValidHttpUrl(URI)) {
+            toast.error("Invalid URL format");
+            return;
+        }
+
+        mutate({ url: URI });
     };
 
     return (
         <main className="flex-1 sm:w-[500px] lg:w-[550px] m-8 lg:m-auto sm:m-auto flex flex-col items-center">
+            <ToastContainer />
             <div className="my-20 text-5xl font-poppins text-center">URL shortner</div>
             <div className="m-5 w-full flex-col lg:flex md:flex lg:flex-row">
                 <input
@@ -41,7 +53,13 @@ export default function Home() {
                     onClick={handleUrlSubmit}
                     className="w-full sm:w-full lg:w-1/4 lg:ml-2 p-2 flex items-center justify-center dark:disabled:bg-bg-secondary disabled:bg-gray-100 font-bold border rounded-md dark:border-border-gray hover:bg-gray-50 dark:hover:bg-bg-secondary transition-all"
                     type="submit">
-                    {isLoading ? <Fragment><Loader /> <span className="ml-2">Loading</span></Fragment> : "Shorten"}
+                    {isLoading ? (
+                        <Fragment>
+                            <Loader /> <span className="ml-2">Loading</span>
+                        </Fragment>
+                    ) : (
+                        "Shorten"
+                    )}
                 </button>
             </div>
             {shortly && <ResultCard url={url} shortUrl={shortly} />}

@@ -1,3 +1,4 @@
+import Footer from "./footer";
 import { Nav } from "./nav";
 
 type Props = {
@@ -9,6 +10,7 @@ export const Layout = ({children}: Props) => {
         <div className='flex flex-col'>
             <Nav />
             {children}
+            <Footer />
         </div>
     )
 }

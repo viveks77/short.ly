@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app'
 import { Layout } from '@/components/layout'
 import { api } from '@/utils/api';

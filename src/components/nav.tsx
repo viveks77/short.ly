@@ -6,7 +6,7 @@ const DarkModeButton = dynamic(() => import('./darkModeButton'), {ssr: false});
 
 export const Nav = () => {
     const [theme, setTheme] = useDarkMode();
-    
+     
     return (
         <header className="flex-0 top-0 flex align-center justify-around p-4">
             <div className="text-2xl">

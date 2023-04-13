@@ -1,5 +1,6 @@
 export const ShortUrlConsts = {
-    URL_EXPIRY_IN_DAYS : 1
+    URL_EXPIRY_IN_DAYS : 1,
+    URL_EXPIRY_IN_HOURS: 1,
 }
 
 export const BaseUrl = process.env.NODE_ENV === "production"
