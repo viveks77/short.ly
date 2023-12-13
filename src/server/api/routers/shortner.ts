@@ -10,7 +10,7 @@ export const shortnerRouter = createTRPCRouter({
   create: publicProcedure
     .input(z.string().trim().url())
     .mutation(async ({ input, ctx }) => {
-      const ip = ctx.headers.get("x-forwarded-for") ?? '127.0.0.1';
+      const ip = ctx.headers.get("x-forwarded-host") ?? '127.0.0.1';
 
       const isLimited = await isRateLimited(ip);
       if(isLimited){
