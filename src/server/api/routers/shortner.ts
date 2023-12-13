@@ -28,7 +28,7 @@ export const shortnerRouter = createTRPCRouter({
         alias = nanoid(7);
       }while(!!(await ctx.db.shortUrl.count({where: {alias}})));
       
-      let expiresIn = new Date();
+      const expiresIn = new Date();
       expiresIn.setHours(expiresIn.getHours() + Number(env.URL_EXPIRY_IN_HOURS));
       
 
@@ -56,10 +56,6 @@ export const shortnerRouter = createTRPCRouter({
           message: "",
         });
 
-      ctx.db.shortUrl.update({
-        where: { alias: input.alias },
-        data: { clicks: shortUrl.clicks++ },
-      });
 
       if (shortUrl.expiresIn.getTime() < Date.now())
         throw new TRPCError({

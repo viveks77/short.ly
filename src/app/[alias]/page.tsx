@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import { ShortUrl } from "@prisma/client";
+import type { ShortUrl } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 const page = async ({ params }: { params: { alias: string } }) => {

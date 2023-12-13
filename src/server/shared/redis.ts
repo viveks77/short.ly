@@ -1,6 +1,7 @@
 import { env } from '@/env';
 import { getRedisConfig } from '@/trpc/shared';
-import Redis, { RedisOptions } from 'ioredis';
+import Redis from 'ioredis';
+import type { RedisOptions } from 'ioredis';
 
 const config = getRedisConfig();
 

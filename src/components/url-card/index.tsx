@@ -1,5 +1,5 @@
 import { getBaseUrl } from "@/trpc/shared";
-import { ShortUrl } from "@prisma/client";
+import type { ShortUrl } from "@prisma/client";
 import { useMemo } from "react";
 import {
     Card, CardTitle,
@@ -29,9 +29,8 @@ const UrlCard = ({ shortUrl }: Props) => {
 
   const getUrlName = (alias: string) => env.NEXT_PUBLIC_APP_NAME + "/" + alias;
 
-  const copyToClipboard = () => {
-    // console.log(getBaseUrl());
-    navigator.clipboard.writeText(BaseUrl + "/" + shortUrl.alias);
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(BaseUrl + "/" + shortUrl.alias);
     toast({
       title: "URL copied to Clipboard",
     });

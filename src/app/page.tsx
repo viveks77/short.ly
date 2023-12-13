@@ -7,9 +7,8 @@ import { useToast } from "@/components/ui/use-toast";
 import UrlCard from "@/components/url-card";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorageHook";
 import { api } from "@/trpc/react";
-import { ShortUrl } from "@prisma/client";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import type { ShortUrl } from "@prisma/client";
+import { useMemo, useRef, useState } from "react";
 import { z } from "zod";
 
 
@@ -18,7 +17,7 @@ export default function Home() {
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   
-  const [storedValue, setValue] = useLocalStorage("urls", []);
+  const [storedValue, setValue] = useLocalStorage<ShortUrl[]>("urls", []);
   const [isRunOnce, setIsRunOnce] = useState<boolean>(true);
 
   const {toast} = useToast();
@@ -44,7 +43,6 @@ export default function Home() {
       setValue([...storedValue, res])
     },
     onError: (e) => {
-      console.log(e.data);
       if(e.data?.httpStatus === 429 && e.data?.code === "TOO_MANY_REQUESTS"){
         toast({ title: "Too many request. Please try again later.", variant: "destructive" })
       }
@@ -70,7 +68,7 @@ export default function Home() {
     if(isRunOnce){
       return [];
     }
-    return storedValue.sort((a:any, b:any) => b.createdAt - a.createdAt);
+    return storedValue.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }, [storedValue, isRunOnce])
 
   return (

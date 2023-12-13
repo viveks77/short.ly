@@ -1,22 +1,24 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
-export function useLocalStorage(key: string, initialValue: any){
+type SetValue<T> = Dispatch<SetStateAction<T>>
+
+export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>]{
     
-    const readValue = useCallback(() => {
+    const readValue = useCallback(():T => {
         if(typeof window == 'undefined'){
             return initialValue;
         }
 
         try{
             const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
+            return item ? (JSON.parse(item) as T) : initialValue;
         }catch(error){
             return initialValue;
         }
 
     }, [initialValue, key])
 
-    const [storedValue, setStoredValue] = useState(initialValue);
+    const [storedValue, setStoredValue] = useState<T>(initialValue);
     
     useEffect(() => {
         setStoredValue(readValue());
@@ -35,19 +37,17 @@ export function useLocalStorage(key: string, initialValue: any){
         return () => window.removeEventListener('storage', changeHandler);
     }, [])
 
-    return useMemo(() => {
-        const setValue = (value:any) => {
-            if(typeof window === 'undefined'){
-                return;
-            }
-
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            if(valueToStore !== storedValue){
-                setStoredValue(valueToStore);
-                window.localStorage.setItem(key, JSON.stringify(valueToStore));
-            }
+    const setValue: SetValue<T> = useCallback(value => {
+        if(typeof window === 'undefined'){
+            return;
         }
-        return [storedValue, setValue];
+
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
+        if(valueToStore !== storedValue){
+            setStoredValue(valueToStore);
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
     }, [storedValue, key])
 
+    return [storedValue, setValue]
 }

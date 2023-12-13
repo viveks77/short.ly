@@ -3,7 +3,6 @@ import redis from "./redis";
 const windowSize = env.RATELIMITER_LIMIT_SIZE;
 const timeFrame = env.RATELIMITER_FRAME_SIZE; // in seconds
 
-type Window = Array<Date>;
 
 export const isRateLimited = async (key: string): Promise<boolean> => {
   const currentDate = Date.now();
