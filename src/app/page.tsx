@@ -45,6 +45,8 @@ export default function Home() {
     onError: (e) => {
       if(e.data?.httpStatus === 429 && e.data?.code === "TOO_MANY_REQUESTS"){
         toast({ title: "Too many request. Please try again later.", variant: "destructive" })
+      }else{
+        toast({title: "Something went wrong. Please try again later.", variant: "destructive"})
       }
     },
   });

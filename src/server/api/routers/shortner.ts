@@ -1,9 +1,10 @@
-import { z } from "zod";
-import { nanoid } from "nanoid";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { env } from "@/env";
-import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { isRateLimited } from "@/server/shared/rateLimiter";
+import redisClient from "@/server/shared/redis";
+import { TRPCError } from "@trpc/server";
+import { nanoid } from "nanoid";
+import { z } from "zod";
 
 export const shortnerRouter = createTRPCRouter({
   create: publicProcedure
@@ -41,11 +42,20 @@ export const shortnerRouter = createTRPCRouter({
         },
       });
 
+      await redisClient.set(shortUrl.alias, shortUrl.url);
+      await redisClient.expire(shortUrl.alias, 60);
       return shortUrl;
     }),
   get: publicProcedure
     .input(z.object({ alias: z.string().trim() }))
     .query(async ({ input, ctx }) => {
+
+      const urlToRedirect = await redisClient.get(input.alias);
+      if(urlToRedirect){
+        await redisClient.expire(input.alias, 60);
+        return urlToRedirect;
+      }
+
       const shortUrl = await ctx.db.shortUrl.findUnique({
         where: { alias: input.alias },
       });
@@ -63,7 +73,10 @@ export const shortnerRouter = createTRPCRouter({
           message: "Short Url is expired",
         });
 
-      return shortUrl;
+      await redisClient.set(shortUrl.alias, shortUrl.url);
+      await redisClient.expire(shortUrl.alias, 60);
+
+      return shortUrl.url;
     }),
     getAll: publicProcedure
       .input(z.array(z.string()))
