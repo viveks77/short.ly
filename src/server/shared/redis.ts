@@ -1,4 +1,4 @@
-import { env } from '@/env';
+// import { env } from '@/env';
 import { getRedisConfig } from '@/trpc/shared';
 import Redis from 'ioredis';
 import type { RedisOptions } from 'ioredis';
@@ -27,25 +27,26 @@ const options: RedisOptions = {
   },
 };
 
-if(env.NODE_ENV === 'development'){
-  if(!globalForRedis._redisClient){
-    redis = new Redis(options);
-    
-    redis.on("error", (err) => {
-      console.log("[REDIS] ", err);
-    })
-
-    globalForRedis._redisClient = redis;
-  }
-  redisClient = globalForRedis._redisClient;
-}else{
+if(!globalForRedis._redisClient){
   redis = new Redis(options);
   
   redis.on("error", (err) => {
     console.log("[REDIS] ", err);
   })
-  redisClient = redis;
+
+  globalForRedis._redisClient = redis;
 }
+redisClient = globalForRedis._redisClient;
+
+// if(env.NODE_ENV === 'development'){
+// }else{
+//   redis = new Redis(options);
+  
+//   redis.on("error", (err) => {
+//     console.log("[REDIS] ", err);
+//   })
+//   redisClient = redis;
+// }
 
 export default redisClient;
  
