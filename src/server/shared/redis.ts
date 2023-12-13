@@ -8,7 +8,7 @@ const config = getRedisConfig();
 const globalForRedis = global as unknown as {_redisClient: Redis}
 
 let redis: Redis;
-let redisClient: Redis;
+
 
 const options: RedisOptions = {
   host: config.host,
@@ -36,7 +36,7 @@ if(!globalForRedis._redisClient){
 
   globalForRedis._redisClient = redis;
 }
-redisClient = globalForRedis._redisClient;
+const redisClient = globalForRedis._redisClient;
 
 // if(env.NODE_ENV === 'development'){
 // }else{
