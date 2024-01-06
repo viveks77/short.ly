@@ -1,9 +1,8 @@
-import { getBaseUrl } from "@/trpc/shared";
 import type { ShortUrl } from "@prisma/client";
 import { useMemo } from "react";
 import {
-    Card, CardTitle,
-    CardDescription
+  Card, CardTitle,
+  CardDescription
 } from "../ui/card";
 import { env } from "../../env";
 import { ArrowTopRightIcon, CopyIcon } from "@radix-ui/react-icons";
@@ -18,13 +17,13 @@ type Props = {
 };
 
 const BaseUrl = process.env.NODE_ENV === "production"
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    ? `https://${env.NEXT_PUBLIC_APP_NAME}`
     : `http://localhost:${process.env.PORT ?? 3000}`;
 
 const UrlCard = ({ shortUrl }: Props) => {
   const { toast } = useToast();
   const uri = useMemo(() => {
-    return getBaseUrl() + "/" + shortUrl.alias;
+    return BaseUrl + "/" + shortUrl.alias;
   }, [shortUrl.alias]);
 
   const getUrlName = (alias: string) => env.NEXT_PUBLIC_APP_NAME + "/" + alias;
